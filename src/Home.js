@@ -11,16 +11,18 @@ function Home() {
 
     const getDatos = async (e) => {
         e.preventDefault()
+        setFechas([])
         const date = new Date(fecha.fechaInicio.replaceAll('-', '/'))
         const coso = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + 'T00:00:00.000Z'
-        await axios.get(`https://localhost:7073/api/PersonasPases/byFecha/${coso}`)
+        await axios.get(`https://localhost:7073/api/PersonasPases/byFec ha/${coso}`)
             .then(r => {
                 r.data.map(async coso => {
                     let cosoo = {
                         id: coso.id,
                         usuario: '',
                         tipo: '',
-                        pases: 0
+                        pases: 0,
+                        fechaCompra: coso.fechaCompra.split('T')[0]
                     }
                     await axios.get(`https://localhost:7073/api/Personas/${coso.idPersona}`)
                         .then(async res => {
@@ -61,9 +63,12 @@ function Home() {
             </form>
             {fechas.map(fech => (
                 <div key={fech.id}>
-                    <p>{console.log(fech)}</p>
-                    <p></p>
-                    <p></p>
+                    <p>--------------------------------------</p>
+                    <p>Nombre: {fech.usuario}</p>
+                    <p>Pases restantes: {fech.pases}</p>
+                    <p>Tipo de pase: {fech.tipo}</p>
+                    <p>Fecha de compra: {fech.fechaCompra}</p>
+                    <p>--------------------------------------</p>
                 </div>
             ))}
         </div>
